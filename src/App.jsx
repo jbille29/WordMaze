@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import moment from 'moment';
+import 'moment-timezone';
+
 
 function App() {
 
-  const [ gameObject, setGameObject ] = useState(null)
-  
-  const fetchData = async () => {
-    try {
+  const [game, setGame] = useState(null);
 
-      const response = await axios.get("https://wordmaze-api.onrender.com/game1")
-      const gameObject = response.data;
-      setGameObject(gameObject)
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("https://wordmaze-api.onrender.com/game1");
+      //const response = await fetch("http://localhost:3500/game1")
+      const jsonData = await response.json();
+      setGame(jsonData);
+    };
 
-    } catch(err) {
-      console.log(err)
-    }
-  }
+    fetchData(); // Fetch data initially
 
-  useEffect(()=>{
-    fetchData()
-  },[])
+    const intervalId = setInterval(fetchData, 300000); // Call fetchData every 30 seconds
+
+    return () => clearInterval(intervalId); // Clean up by clearing the interval when the component unmounts
+  }, []);
 
   return (
     <>
@@ -29,8 +31,8 @@ function App() {
           padding: "1rem 2rem",
           borderRadius: "1rem"
         }}>
-        {gameObject && 
-          gameObject.grid
+        {game && 
+          game._id
           }
       </div>
     </>
