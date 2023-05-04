@@ -8,7 +8,7 @@ function App() {
   const fetchData = async () => {
     try {
 
-      const response = await axios.get("http://localhost:3500/game1")
+      const response = await axios.get("https://wordmaze-api.onrender.com/game1")
       const gameObject = response.data;
       setGameObject(gameObject)
 
